@@ -1,5 +1,9 @@
 import numpy as np
 
+import time
+from itertools import accumulate
+import functools
+
 from .base_agent import BaseAgent
 from cs285.policies.MLP_policy import MLPPolicyPG
 from cs285.infrastructure.replay_buffer import ReplayBuffer
@@ -131,12 +135,29 @@ class PGAgent(BaseAgent):
         # TODO: create list_of_discounted_returns
         # Hint: note that all entries of this output are equivalent
             # because each sum is from 0 to T (and doesnt involve t)
-        list_of_discounted_returns = []
-        print(type(rewards))
-        print(type(rewards[0]))
 
+        # naive
+        #total_return = 0
+        #current_discount = 1
+        #for i in range(len(rewards)):
+        #    total_return += rewards[i] * current_discount
+        #    current_discount *= self.gamma
 
-        return list_of_discounted_returns
+        # Better to start calucaltion from end
+        # R = 1 * r0 + g1 * ( r1 + g2 * ( r2 + (...) ) )
+        # reversed: (((( r9 * g + r8 ) * g + r7 ) * g) ... + r1 ) * g + r0 * 1
+
+        #total_return2 = functools.reduce(
+        #    lambda cur_sum, reward : cur_sum * self.gamma + reward,
+        #    reversed(rewards)
+        #)
+
+        total_return = list(accumulate(
+            reversed(rewards),
+            lambda ret, reward: ret * self.gamma + reward,
+        ))[-1]
+
+        return [total_return] * len(rewards)
 
     def _discounted_cumsum(self, rewards):
         """
@@ -150,7 +171,16 @@ class PGAgent(BaseAgent):
             # because the summation happens over [t, T] instead of [0, T]
         # HINT2: it is possible to write a vectorized solution, but a solution
             # using a for loop is also fine
-        list_of_discounted_cumsums = []
 
-        return list_of_discounted_cumsums
+        # naive
+        #list_of_discounted_cumsums = []
+        #time_start = time.time()
+        #for i in range(len(rewards)):
+        #    list_of_discounted_cumsums.append(self._discounted_return(rewards[i:])[0])
+
+        return list(accumulate(
+            reversed(rewards),
+            lambda ret, reward: ret * self.gamma + reward,
+        ))[::-1]
+
 
