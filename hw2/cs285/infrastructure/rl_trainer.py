@@ -159,7 +159,7 @@ class RL_Trainer(object):
     def collect_training_trajectories(self, itr, load_initial_expertdata, collect_policy, batch_size):
         # Done: get this from hw1
         # if your load_initial_expertdata is None, then you need to collect new trajectories at *every* iteration
-        if not load_initial_expertdata is None and itr == 0:
+        if load_initial_expertdata is not None and itr == 0:
             with open(load_initial_expertdata, "rb") as f:
                 loaded_paths = pickle.load(f)
             print(loaded_paths[0].keys())

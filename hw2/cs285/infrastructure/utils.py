@@ -113,7 +113,7 @@ def sample_trajectories(env, policy, min_timesteps_per_batch, max_path_length, r
 	timesteps_this_batch = 0
 	paths = []
 	while timesteps_this_batch < min_timesteps_per_batch:
-		paths.append(sample_trajectory(env, policy, max_path_length, render=False, render_mode=('rgb_array')))
+		paths.append(sample_trajectory(env, policy, max_path_length, render=render, render_mode=render_mode))
 		timesteps_this_batch += get_pathlength(paths[-1])
 
 	if len(paths) > 1 and paths[0]["reward"].shape != paths[1]["reward"].shape:
