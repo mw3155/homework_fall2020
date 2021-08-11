@@ -167,6 +167,9 @@ class RL_Trainer(object):
             with open(load_initial_expertdata, "rb") as f:
                 loaded_paths = pickle.load(f)
             print(loaded_paths[0].keys())
+            print("loaded n examples:", len(loaded_paths[0]["reward"]))
+            print("obs:", loaded_paths[0]["observation"].shape)
+            print("action:", loaded_paths[0]["action"].shape)
             return loaded_paths, 0, None
 
         # TODO collect `batch_size` samples to be used for training
