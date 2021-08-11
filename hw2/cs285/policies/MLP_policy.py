@@ -139,11 +139,19 @@ class MLPPolicyPG(MLPPolicy):
             # by the `forward` method
         # HINT3: don't forget that `optimizer.step()` MINIMIZES a loss
 
-        loss = TODO
+        action_dist = self.forward(observations)
+        log_probs = action_dist.log_prob(actions)
+        if not self.discrete:
+            log_probs = log_probs.sum(1)
+        loss = -1 * (log_probs * advantages).sum()
 
         # TODO: optimize `loss` using `self.optimizer`
         # HINT: remember to `zero_grad` first
-        TODO
+
+        # move this downwards after nn baseline?
+        self.optimizer.zero_grad()
+        loss.backward()
+        self.optimizer.step()
 
         if self.nn_baseline:
             ## TODO: normalize the q_values to have a mean of zero and a standard deviation of one
