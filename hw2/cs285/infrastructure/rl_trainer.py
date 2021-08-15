@@ -68,6 +68,7 @@ class RL_Trainer(object):
 
         ob_dim = self.env.observation_space.shape if img else self.env.observation_space.shape[0]
         ac_dim = self.env.action_space.n if discrete else self.env.action_space.shape[0]
+        print(f"ob_dim:{ob_dim}, ac_dim:{ac_dim}")
         self.params['agent_params']['ac_dim'] = ac_dim
         self.params['agent_params']['ob_dim'] = ob_dim
 
@@ -137,6 +138,7 @@ class RL_Trainer(object):
 
             # add collected data to replay buffer
             self.agent.add_to_replay_buffer(paths)
+            print("replaybuffer size:", len(self.agent.replay_buffer.obs))
 
             # train agent (using sampled data from replay buffer)
             train_logs = self.train_agent()
