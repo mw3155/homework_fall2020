@@ -137,8 +137,6 @@ class RL_Trainer(object):
         print_period = 1000 if isinstance(self.agent, DQNAgent) else 1
 
         for itr in range(n_iter):
-            if itr % print_period == 0:
-                print("\n\n********** Iteration %i ************"%itr)
 
             # decide if videos should be rendered/logged at this iteration
             if itr % self.params['video_log_freq'] == 0 and self.params['video_log_freq'] != -1:
@@ -153,6 +151,9 @@ class RL_Trainer(object):
                 self.logmetrics = True
             else:
                 self.logmetrics = False
+
+            if self.logmetrics:
+                print("\n\n********** Iteration %i ************"%itr)
 
             # collect trajectories, to be used for training
             if isinstance(self.agent, DQNAgent):
@@ -180,8 +181,6 @@ class RL_Trainer(object):
             self.agent.add_to_replay_buffer(paths)
 
             # train agent (using sampled data from replay buffer)
-            if itr % print_period == 0:
-                print("\nTraining agent...")
             all_logs = self.train_agent()
 
             # log/save
@@ -245,7 +244,6 @@ class RL_Trainer(object):
 
     def train_agent(self):
         # Done: get this from hw2
-        print('\nTraining agent using sampled data from replay buffer...')
         train_logs = []
         for train_step in range(self.params['num_agent_train_steps_per_iter']):
 
