@@ -136,6 +136,11 @@ class RL_Trainer(object):
 
         print_period = 1000 if isinstance(self.agent, DQNAgent) else 1
 
+        # TESTING: overwrite n_iter; default is 2e8 (200mio)
+        # abort after 1.5mio
+        if n_iter == int(2e8):
+            n_iter = int(1.5e6)
+        print("n_iter:", n_iter)
         for itr in range(n_iter):
 
             # decide if videos should be rendered/logged at this iteration
