@@ -105,3 +105,6 @@ class DQNAgent(object):
 
         self.t += 1
         return log
+
+    def save(self, filepath):
+        self.critic.save(filepath)

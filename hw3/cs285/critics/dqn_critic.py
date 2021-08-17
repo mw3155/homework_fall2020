@@ -63,6 +63,8 @@ class DQNCritic(BaseCritic):
         terminal_n = ptu.from_numpy(terminal_n)
 
         qa_t_values = self.q_net(ob_no)
+        print("critic ob_no in:", ob_no.shape)
+        print("critic vals out:", qa_t_values.shape)
         q_t_values = torch.gather(qa_t_values, 1, ac_na.unsqueeze(1)).squeeze(1)
         
         # Done compute the Q-values from the target network 
@@ -107,3 +109,6 @@ class DQNCritic(BaseCritic):
         obs = ptu.from_numpy(obs)
         qa_values = self.q_net(obs)
         return ptu.to_numpy(qa_values)
+
+    def save(self, filepath):
+        torch.save(self.q_net.state_dict(), filepath)
