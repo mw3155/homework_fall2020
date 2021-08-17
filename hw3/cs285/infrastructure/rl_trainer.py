@@ -201,7 +201,7 @@ class RL_Trainer(object):
     ####################################
     ####################################
 
-    def collect_training_trajectories(self, itr, initial_expertdata, collect_policy, num_transitions_to_sample, save_expert_data_to_disk=False):
+    def collect_training_trajectories(self, itr, initial_expertdata, collect_policy, batch_size, save_expert_data_to_disk=False):
         """
         :param itr:
         :param load_initial_expertdata:  path to expert data pkl file
@@ -214,8 +214,8 @@ class RL_Trainer(object):
         """
         # Done: get this from hw2
         # if your load_initial_expertdata is None, then you need to collect new trajectories at *every* iteration
-        if load_initial_expertdata is not None and itr == 0:
-            with open(load_initial_expertdata, "rb") as f:
+        if initial_expertdata is not None and itr == 0:
+            with open(initial_expertdata, "rb") as f:
                 loaded_paths = pickle.load(f)
             print(loaded_paths[0].keys())
             print("loaded n examples:", len(loaded_paths))
@@ -226,7 +226,6 @@ class RL_Trainer(object):
         # HW1 collect `batch_size` samples to be used for training
         # HINT1: use sample_trajectories from utils
         # HINT2: you want each of these collected rollouts to be of length self.params['ep_len']
-        print("\nCollecting data to be used for training...")
         paths, envsteps_this_batch = utils.sample_trajectories(
             self.env, 
             collect_policy, 
@@ -238,7 +237,7 @@ class RL_Trainer(object):
         # collect more rollouts with the same policy, to be saved as videos in tensorboard
         # note: here, we collect MAX_NVIDEO rollouts, each of length MAX_VIDEO_LEN
         train_video_paths = None
-        if self.log_video:
+        if self.logvideo:
             print('\nCollecting train rollouts to be used for saving videos...')
             ## HW1 look in utils and implement sample_n_trajectories
             train_video_paths = utils.sample_n_trajectories(self.env, collect_policy, MAX_NVIDEO, MAX_VIDEO_LEN, True)

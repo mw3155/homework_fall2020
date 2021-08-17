@@ -31,7 +31,7 @@ class ACAgent(BaseAgent):
         self.replay_buffer = ReplayBuffer()
 
     def train(self, ob_no, ac_na, re_n, next_ob_no, terminal_n):
-        # TODO Implement the following pseudocode:
+        # Done Implement the following pseudocode:
         for i in range(self.agent_params["num_critic_updates_per_agent_update"]):
             critic_loss = self.critic.update(ob_no, ac_na, next_ob_no, re_n, terminal_n)
 
@@ -47,7 +47,7 @@ class ACAgent(BaseAgent):
         return loss
 
     def estimate_advantage(self, ob_no, next_ob_no, re_n, terminal_n):
-        # TODO Implement the following pseudocode:
+        # Done Implement the following pseudocode:
         # 1) query the critic with ob_no, to get V(s)
         # 2) query the critic with next_ob_no, to get V(s')
         # 3) estimate the Q value as Q(s, a) = r(s, a) + gamma*V(s')
