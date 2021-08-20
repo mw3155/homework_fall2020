@@ -34,12 +34,13 @@ class MPCPolicy(BasePolicy):
         # TODO(Q1) uniformly sample trajectories and return an array of
         # dimensions (num_sequences, horizon, self.ac_dim) in the range
         # [self.low, self.high]
-        return random_action_sequences
+        seqs = np.random.random((num_sequences, horizon, self.ac_dim))
+        return self.low + seqs * (self.high - self.low)
 
     def get_action(self, obs):
 
         if self.data_statistics is None:
-            # print("WARNING: performing random actions.")
+            print("WARNING: performing random actions.")
             return self.sample_action_sequences(num_sequences=1, horizon=1)[0]
 
         # sample random actions (N x horizon)
